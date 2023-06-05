@@ -1,0 +1,474 @@
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.common.exceptions import TimeoutException
+
+
+import time
+from selenium.webdriver.common.action_chains import ActionChains
+
+url = "https://login.lens.poly.com/login?state=hKFo2SBsMkdHdjFweHZHVkZEN05VemJzUENWdkloY2wyeGZleaFupWxvZ2luo3RpZNkgMmJ2OGVoRExrenBpTzlrNVY2bUd3VWI2N0FKQzRTYmKjY2lk2SBPSFZESFlTWU9HdUpqOFVUTm5pcGRmbHUzSDVkNXFNcw&client=OHVDHYSYOGuJj8UTNnipdflu3H5d5qMs&protocol=oauth2&initialScreen=login&redirect_uri=https%3A%2F%2Flens.poly.com%2Fauth_callback&max_age=43200&scope=openid%20profile%20email%20offline_access&response_type=code&response_mode=query&nonce=dndOUDJQallQN35Ocy5hNTdVbkpBUlBFOHhWNmpFUG9Hd1d2XzdVWW5CTA%3D%3D&code_challenge=iK_M4YsENADpNYWHdOluutiq35Qqq8wsg8YVLPHHzRk&code_challenge_method=S256&auth0Client=eyJuYW1lIjoiYXV0aDAtcmVhY3QiLCJ2ZXJzaW9uIjoiMS4yLjAifQ%3D%3D"
+chrome_driver_path = r"C:\Users\LAguilar\OneDrive - Poly\Documents\chromedriver"
+
+chrome_options = webdriver.ChromeOptions()
+chrome_options.add_argument("--incognito")
+
+driver = webdriver.Chrome(executable_path=chrome_driver_path, options=chrome_options)
+driver.get(url)
+
+# Espera a que el botón "Sign in with Microsoft" esté visible
+microsoft_sign_in_button = WebDriverWait(driver, 10).until(
+    EC.presence_of_element_located((By.CSS_SELECTOR, 'a[data-provider="oauth2"]'))
+)
+time.sleep(2)
+# Haz clic en el botón "Sign in with Microsoft"
+microsoft_sign_in_button.click()
+
+
+
+
+email_field = WebDriverWait(driver, 20).until(
+    EC.presence_of_element_located((By.ID, "i0116"))
+)
+
+time.sleep(2)
+
+email_field.send_keys("equiposdemo@outlook.com")
+email_field.send_keys(Keys.ENTER)
+
+time.sleep(1)
+
+password_field = WebDriverWait(driver, 20).until(
+    EC.presence_of_element_located((By.ID, "i0118"))
+)
+
+time.sleep(2)
+
+password_field.send_keys("Polydemo!23")
+time.sleep(1)
+
+password_field.send_keys(Keys.ENTER)
+
+time.sleep(1)
+
+yes_button = WebDriverWait(driver, 20).until(
+    EC.element_to_be_clickable((By.ID, "idSIButton9"))
+)
+
+time.sleep(2)
+
+yes_button.click()
+
+
+
+time.sleep(2)
+
+
+
+# Espera a que el elemento span esté visible
+span_element = WebDriverWait(driver, 20).until(
+    EC.presence_of_element_located((By.CSS_SELECTOR, 'span.checkbox-custom'))
+)
+
+# Espera a que la página siguiente se cargue después de hacer clic en "Sí"
+time.sleep(2)
+
+# Haz clic en el elemento span
+span_element.click()
+time.sleep(1)
+
+
+# Espera a que el botón esté visible
+welcome_button = WebDriverWait(driver, 20).until(
+    EC.presence_of_element_located((By.CSS_SELECTOR, 'button[data-testid="welcome-modal-button"]'))
+)
+
+# Espera a que la página siguiente se cargue después de hacer clic en "Sí"
+time.sleep(1)
+
+# Haz clic en el botón
+welcome_button.click()
+
+time.sleep(1)
+
+
+
+# Espera a que el elemento esté visible
+inventory_card = WebDriverWait(driver, 20).until(
+    EC.presence_of_element_located((By.CSS_SELECTOR, 'div[data-testid="inventory-card"]'))
+)
+
+# Espera antes de cerrar el navegador
+time.sleep(1)
+
+
+# Haz clic en el elemento
+inventory_card.click()
+
+
+time.sleep(1)
+
+
+
+# Espera a que el elemento esté visible
+search_table = WebDriverWait(driver, 10).until(
+    EC.presence_of_element_located((By.CSS_SELECTOR, 'input[data-testid="search-table"]'))
+)
+
+# Espera antes de cerrar el navegador
+time.sleep(1)
+
+
+# Haz clic en el elemento
+search_table.click()
+
+time.sleep(1)
+
+# Escribe "G7500" en el campo de búsqueda
+search_table.send_keys("G7500 MAYA")
+
+
+time.sleep(5)
+
+# Encuentra el elemento <td> que contiene una dirección IP
+ip_element = WebDriverWait(driver, 10).until(
+    EC.presence_of_element_located((By.XPATH, '//td[contains(text(), ".")]'))
+)
+time.sleep(3)
+# Extrae la dirección IP del elemento
+ip_address = ip_element.text
+
+# Crea la URL con la dirección IP
+url = f"https://{ip_address}"
+time.sleep(1)
+
+# Abre una nueva ventana o pestaña
+driver.execute_script("window.open('about:blank', 'new_window');")
+
+# Cambia el control del navegador a la nueva ventana o pestaña
+driver.switch_to.window("new_window")
+time.sleep(2)
+# Navega a la URL en la nueva ventana o pestaña
+driver.get(url)
+
+time.sleep(1)
+
+# Espera a que el botón "Advanced" esté visible
+advanced_button = WebDriverWait(driver, 10).until(
+    EC.presence_of_element_located((By.ID, "details-button"))
+)
+
+time.sleep(1)
+
+# Haz clic en el botón "Advanced"
+advanced_button.click()
+
+time.sleep(1)
+
+# Espera a que el enlace "Proceed to 172.31.62.97 (unsafe)" esté visible
+proceed_link = WebDriverWait(driver, 10).until(
+    EC.presence_of_element_located((By.ID, "proceed-link"))
+)
+
+time.sleep(1)
+
+# Haz clic en el enlace "Proceed to 172.31.62.97 (unsafe)"
+proceed_link.click()
+
+time.sleep(2)
+
+# Espera a que el campo de entrada "User Name" esté visible
+username_input = WebDriverWait(driver, 10).until(
+    EC.presence_of_element_located((By.XPATH, "//input[@placeholder='User Name']"))
+)
+
+# Escribe "admin" en el campo de entrada "User Name"
+username_input.send_keys("admin")
+
+
+time.sleep(1)
+
+# Espera a que el campo de entrada "Password" esté visible
+password_field = WebDriverWait(driver, 10).until(
+    EC.presence_of_element_located((By.ID, "password"))
+)
+
+time.sleep(1)
+
+# Ingresa "P456456" en el campo de entrada "Password"
+password_field.click
+time.sleep(1)
+password_field.send_keys("P456456")
+
+time.sleep(1)
+
+# Espera a que el botón "Sign In" esté visible
+sign_in_button = WebDriverWait(driver, 10).until(
+    EC.element_to_be_clickable((By.XPATH, "//button[contains(text(), 'Sign In')]"))
+)
+
+time.sleep(1)
+
+# Haz clic en el botón "Sign In"
+sign_in_button.click()
+
+time.sleep(1)
+
+# Espera a que el botón "OK" esté visible
+ok_button = WebDriverWait(driver, 10).until(
+    EC.presence_of_element_located((By.XPATH, "//button[contains(text(), 'OK')]"))
+)
+
+# Hacer clic en el botón "OK"
+ok_button.click()
+
+time.sleep(3)
+
+
+audio_video_element = WebDriverWait(driver, 10).until(
+    EC.presence_of_element_located((By.XPATH, "//span[contains(text(), 'Audio / Video')]"))
+)
+
+time.sleep(1)
+# Hacer clic en el elemento "Audio / Video"
+audio_video_element.click()
+
+
+time.sleep(2)
+
+# Espera a que el elemento "Audio" esté visible
+audio_element = WebDriverWait(driver, 10).until(
+    EC.presence_of_element_located((By.XPATH, "//div[contains(@class, 'plcm-side-bar-sub-row')]//span[contains(text(), 'Audio')]"))
+)
+
+# Utiliza JavaScript para hacer clic en el elemento "Audio"
+driver.execute_script("arguments[0].click();", audio_element)
+
+
+
+
+time.sleep(5)
+
+
+# Espera hasta que el elemento esté presente en la página
+wait = WebDriverWait(driver, 10)
+element_label = wait.until(
+    EC.presence_of_element_located(
+        (By.XPATH, "//label[contains(text(), 'Enable NoiseBlockAI:')]"))
+)
+
+# Obtén el atributo "for" del elemento "label"
+checkbox_id = element_label.get_attribute("for")
+
+# Busca el elemento "mat-checkbox" utilizando el atributo "for"
+mat_checkbox = driver.find_element(By.ID, checkbox_id)
+
+# Verifica si la clase "mat-checkbox-checked" está presente en "mat-checkbox"
+is_checked = "mat-checkbox-checked" in mat_checkbox.get_attribute("class")
+
+# Si no está marcada, haz clic en el elemento para marcarlo
+if not is_checked:
+    mat_checkbox.click()
+
+
+
+
+time.sleep(2)
+
+wait = WebDriverWait(driver, 10)
+label_element = wait.until(
+    EC.presence_of_element_located(
+        (By.XPATH, "//label[contains(text(), 'Enable Acoustic Fence:')]"))
+)
+
+# Obtén el atributo "for" del elemento "label"
+checkbox_id = label_element.get_attribute("for")
+
+# Busca el elemento "mat-checkbox" utilizando el atributo "for"
+mat_checkbox = driver.find_element(By.ID, checkbox_id)
+
+# Verifica si la clase "mat-checkbox-checked" está presente en "mat-checkbox"
+is_checked = "mat-checkbox-checked" in mat_checkbox.get_attribute("class")
+
+# Si no está marcada, haz clic en el elemento para marcarlo
+if not is_checked:
+    mat_checkbox.click()
+
+
+
+
+time.sleep(2)
+
+# Encuentra y selecciona el mat-select correspondiente a 'Acoustic Fence Sensitivity:'
+mat_select = wait.until(
+    EC.element_to_be_clickable(
+        (By.XPATH, "//label[contains(text(), 'Acoustic Fence Sensitivity:')]/following-sibling::div//mat-select"))
+)
+
+# Haz clic en el mat-select
+mat_select.click()
+
+time.sleep(2)
+
+# Espera a que las opciones del mat-select estén visibles
+wait.until(EC.presence_of_all_elements_located((By.XPATH, "//mat-option[@role='option']")))
+
+# Encuentra y selecciona la opción con el valor '6'
+option_to_select = wait.until(
+    EC.element_to_be_clickable(
+        (By.XPATH, "//mat-option[@role='option']//span[contains(text(), '6')]"))
+)
+
+# Haz clic en la opción deseada
+option_to_select.click()
+
+
+
+
+
+
+time.sleep(2)
+
+
+
+# Espera a que el elemento con el texto "General Settings" esté visible
+general_settings = WebDriverWait(driver, 10).until(
+    EC.presence_of_element_located((By.XPATH, "//span[contains(text(), 'General Settings')]"))
+)
+
+# Hacer clic en el elemento "General Settings"
+general_settings.click()
+
+time.sleep(2)
+
+# Espera a que el elemento con el texto "System_Settings" esté visible
+System_Settings = WebDriverWait(driver, 10).until(
+    EC.presence_of_element_located((By.XPATH, "//span[contains(text(), 'System Settings')]"))
+)
+
+# Hacer clic en el elemento "System_Settings"
+System_Settings.click()
+
+time.sleep(2)
+
+# Encuentra y selecciona la casilla de verificación después de 'Enable Digital Signage:'
+checkbox = wait.until(
+    EC.element_to_be_clickable(
+        (By.XPATH, "//label[contains(text(), 'Enable Digital Signage:')]/following::mat-checkbox"))
+)
+
+# Verifica si la casilla de verificación ya está seleccionada
+checkbox_selected = checkbox.get_attribute("class").find("mat-checkbox-checked") > -1
+
+# Si la casilla de verificación no está seleccionada, haz clic en ella
+if not checkbox_selected:
+    checkbox.click()
+
+    time.sleep(2)
+
+    # Encuentra y selecciona el botón "Save"
+    save_button = wait.until(
+        EC.element_to_be_clickable(
+            (By.XPATH, "//button[contains(text(), 'Save') and contains(@class, 'plcm-button-submit')]"))
+
+    )
+
+    # Haz clic en el botón "Save"
+    save_button.click()
+
+
+
+time.sleep(2)
+
+# Espera a que el elemento con el texto "Provider" esté visible
+provider = WebDriverWait(driver, 10).until(
+    EC.presence_of_element_located((By.XPATH, "//span[contains(text(), 'Provider')]"))
+)
+
+# Hacer clic en el elemento "Provider"
+provider.click()
+
+time.sleep(2)
+
+mat_select_xpath = '/html/body/app-main/section/div[2]/div/provider-page/div/p-form/form/div[2]/p-form-drop-down/div/div/div'
+label_xpath = '//label[contains(text(), "Choose a Provider:")]'
+
+label_element = WebDriverWait(driver, 10).until(
+    EC.element_to_be_clickable((By.XPATH, label_xpath))
+)
+label_element.click()
+
+time.sleep(2)
+
+mat_select = WebDriverWait(driver, 10).until(
+    EC.element_to_be_clickable((By.XPATH, mat_select_xpath))
+)
+mat_select.click()
+
+time.sleep(2)
+
+
+def get_mat_option_text(mat_option_element):
+    text_element = mat_option_element.find_element(By.CSS_SELECTOR, ".mat-option-text")
+    return text_element.text.strip()
+
+selected_option_xpath = "//mat-option[contains(@class, 'mat-selected')]"
+
+selected_option_element = WebDriverWait(driver, 10).until(
+    EC.presence_of_element_located((By.XPATH, selected_option_xpath))
+)
+
+selected_option_text = get_mat_option_text(selected_option_element)
+desired_option_text = "Microsoft Teams"
+
+if selected_option_text != desired_option_text:
+    
+    
+
+    
+    # Aquí puedes seleccionar la opción deseada siguiendo el enfoque que discutimos antes
+        # Esperar a que la opción "Zoom Rooms" esté visible y hacer clic en ella
+    zoom_rooms_option = WebDriverWait(driver, 30).until(
+        EC.visibility_of_element_located((By.XPATH, "//span[contains(text(), 'Microsoft Teams')]"))
+    )
+    zoom_rooms_option.click()
+
+    # Espera a que el botón "Save" esté visible
+    save_button = WebDriverWait(driver, 10).until(
+        EC.presence_of_element_located((By.XPATH, "//button[contains(text(), 'Save')]"))
+    )
+
+
+    # Hacer clic en el botón "Save"
+    save_button.click()
+
+    time.sleep(1)
+
+    # Espera a que el botón "RESTART" esté visible
+    restart_button = WebDriverWait(driver, 10).until(
+        EC.presence_of_element_located((By.XPATH, "//button[contains(text(), 'RESTART')]"))
+    )
+
+    # Hacer clic en el botón "RESTART"
+    restart_button.click()
+    pass
+
+time.sleep(60)
+
+
+
+
+
+
+time.sleep(5)
+
+
+
+
+# Cierra la nueva ventana o pestaña y regresa al control de la ventana original
+driver.close()
+driver.switch_to.window(driver.window_handles[0])
+# Cierra el navegador
+driver.quit()
